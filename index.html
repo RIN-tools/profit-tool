@@ -1,10 +1,338 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>テストページ</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ビカク販売 利益計算ツール</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      background: #f6f7f9;
+      color: #222;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 880px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+
+    .lead {
+      margin: 0 0 24px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .field label {
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap span {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #777;
+      font-size: 14px;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      padding: 12px 12px 12px 32px;
+      border: 1px solid #d9dce3;
+      border-radius: 10px;
+      font-size: 16px;
+      outline: none;
+      background: #fff;
+    }
+
+    .input-wrap input:focus {
+      border-color: #7aa2ff;
+      box-shadow: 0 0 0 3px rgba(122, 162, 255, 0.15);
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .results {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .result-box {
+      background: #f8fafc;
+      border: 1px solid #e5eaf1;
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .result-box .label {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 6px;
+    }
+
+    .result-box .value {
+      font-size: 28px;
+      font-weight: 700;
+      word-break: break-word;
+    }
+
+    .sub-info {
+      margin-top: 20px;
+      padding: 16px;
+      background: #fff8e8;
+      border: 1px solid #f1dfaa;
+      border-radius: 12px;
+      font-size: 13px;
+      color: #6b5a21;
+    }
+
+    .calc-detail {
+      margin-top: 24px;
+      padding: 18px;
+      border: 1px solid #e5eaf1;
+      border-radius: 14px;
+      background: #fcfdff;
+    }
+
+    .calc-detail h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+
+    .calc-detail ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .calc-detail li {
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        margin: 20px auto;
+        padding: 12px;
+      }
+
+      .card {
+        padding: 18px;
+      }
+
+      .grid,
+      .results {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .result-box .value {
+        font-size: 24px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>公開できた！</h1>
+  <div class="container">
+    <div class="card">
+      <h1>ビカク販売 利益計算ツール</h1>
+      <p class="lead">
+        仕入れ・資材・梱包・送料・販売手数料・目標利益を入力すると、最低販売価格の目安を自動計算します。
+      </p>
+
+      <div class="grid">
+        <div class="field">
+          <label for="purchasePrice">仕入れ価格</label>
+          <div class="input-wrap">
+            <span>¥</span>
+            <input type="number" id="purchasePrice" min="0" step="1" value="3000" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="materialCost">資材費</label>
+          <div class="input-wrap">
+            <span>¥</span>
+            <input type="number" id="materialCost" min="0" step="1" value="500" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="packingCost">梱包費</label>
+          <div class="input-wrap">
+            <span>¥</span>
+            <input type="number" id="packingCost" min="0" step="1" value="300" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="shippingCost">送料</label>
+          <div class="input-wrap">
+            <span>¥</span>
+            <input type="number" id="shippingCost" min="0" step="1" value="1200" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="feeRate">販売手数料（%）</label>
+          <div class="input-wrap">
+            <span>%</span>
+            <input type="number" id="feeRate" min="0" max="100" step="0.1" value="10" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="targetProfit">目標利益</label>
+          <div class="input-wrap">
+            <span>¥</span>
+            <input type="number" id="targetProfit" min="0" step="1" value="2000" />
+          </div>
+        </div>
+      </div>
+
+      <div class="results">
+        <div class="result-box">
+          <div class="label">最低販売価格</div>
+          <div class="value" id="requiredPrice">¥0</div>
+        </div>
+
+        <div class="result-box">
+          <div class="label">利益額</div>
+          <div class="value" id="profitAmount">¥0</div>
+        </div>
+
+        <div class="result-box">
+          <div class="label">利益率</div>
+          <div class="value" id="profitRate">0%</div>
+        </div>
+      </div>
+
+      <div class="calc-detail">
+        <h2>計算内訳</h2>
+        <ul>
+          <li>原価合計：<span id="totalCost">¥0</span></li>
+          <li>販売手数料額：<span id="feeAmount">¥0</span></li>
+          <li>販売価格 −（原価合計 + 販売手数料）= 利益</li>
+        </ul>
+      </div>
+
+      <div class="sub-info">
+        ※ このツールは簡易計算用です。実際の販売では値引き、資材ロス、撮影・管理の手間、振込手数料なども必要に応じて見込んでください。
+      </div>
+    </div>
+  </div>
+
+  <script>
+    "use strict";
+
+    function getNumber(id) {
+      const value = parseFloat(document.getElementById(id).value);
+      return Number.isFinite(value) && value >= 0 ? value : 0;
+    }
+
+    function formatYen(value) {
+      return "¥" + Math.round(value).toLocaleString("ja-JP");
+    }
+
+    function formatPercent(value) {
+      return value.toFixed(1).replace(/\.0$/, "") + "%";
+    }
+
+    function calculate() {
+      const purchasePrice = getNumber("purchasePrice");
+      const materialCost = getNumber("materialCost");
+      const packingCost = getNumber("packingCost");
+      const shippingCost = getNumber("shippingCost");
+      const feeRate = getNumber("feeRate");
+      const targetProfit = getNumber("targetProfit");
+
+      const totalCost = purchasePrice + materialCost + packingCost + shippingCost;
+
+      let requiredPrice = 0;
+      if (feeRate >= 100) {
+        requiredPrice = 0;
+      } else {
+        requiredPrice = (totalCost + targetProfit) / (1 - feeRate / 100);
+      }
+
+      const feeAmount = requiredPrice * (feeRate / 100);
+      const profitAmount = requiredPrice - totalCost - feeAmount;
+      const profitRate = requiredPrice > 0 ? (profitAmount / requiredPrice) * 100 : 0;
+
+      document.getElementById("requiredPrice").textContent = feeRate >= 100
+        ? "計算不可"
+        : formatYen(requiredPrice);
+
+      document.getElementById("profitAmount").textContent = feeRate >= 100
+        ? "-"
+        : formatYen(profitAmount);
+
+      document.getElementById("profitRate").textContent = feeRate >= 100
+        ? "-"
+        : formatPercent(profitRate);
+
+      document.getElementById("totalCost").textContent = formatYen(totalCost);
+      document.getElementById("feeAmount").textContent = feeRate >= 100
+        ? "-"
+        : formatYen(feeAmount);
+    }
+
+    const inputIds = [
+      "purchasePrice",
+      "materialCost",
+      "packingCost",
+      "shippingCost",
+      "feeRate",
+      "targetProfit"
+    ];
+
+    inputIds.forEach(function(id) {
+      document.getElementById(id).addEventListener("input", calculate);
+    });
+
+    calculate();
+  </script>
 </body>
 </html>
