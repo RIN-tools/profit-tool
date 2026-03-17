@@ -18,7 +18,7 @@
     }
 
     .container {
-      max-width: 880px;
+      max-width: 920px;
       margin: 40px auto;
       padding: 20px;
     }
@@ -39,6 +39,12 @@
       margin: 0 0 24px;
       color: #666;
       font-size: 14px;
+    }
+
+    .section-title {
+      margin: 28px 0 14px;
+      font-size: 18px;
+      font-weight: 700;
     }
 
     .grid {
@@ -62,7 +68,7 @@
       position: relative;
     }
 
-    .input-wrap span {
+    .prefix {
       position: absolute;
       left: 12px;
       top: 50%;
@@ -90,10 +96,43 @@
       grid-column: 1 / -1;
     }
 
+    .radio-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .radio-card {
+      flex: 1;
+      min-width: 240px;
+      border: 1px solid #d9dce3;
+      border-radius: 12px;
+      padding: 14px 16px;
+      background: #fafbfd;
+    }
+
+    .radio-card label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+      margin: 0;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .radio-card small {
+      display: block;
+      margin-top: 4px;
+      color: #666;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
     .results {
       margin-top: 28px;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 16px;
     }
 
@@ -111,19 +150,9 @@
     }
 
     .result-box .value {
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 700;
       word-break: break-word;
-    }
-
-    .sub-info {
-      margin-top: 20px;
-      padding: 16px;
-      background: #fff8e8;
-      border: 1px solid #f1dfaa;
-      border-radius: 12px;
-      font-size: 13px;
-      color: #6b5a21;
     }
 
     .calc-detail {
@@ -149,7 +178,27 @@
       font-size: 14px;
     }
 
-    @media (max-width: 700px) {
+    .sub-info {
+      margin-top: 20px;
+      padding: 16px;
+      background: #fff8e8;
+      border: 1px solid #f1dfaa;
+      border-radius: 12px;
+      font-size: 13px;
+      color: #6b5a21;
+    }
+
+    .highlight {
+      margin-top: 18px;
+      padding: 14px 16px;
+      background: #eef6ff;
+      border: 1px solid #cfe0ff;
+      border-radius: 12px;
+      font-size: 14px;
+      color: #24406c;
+    }
+
+    @media (max-width: 760px) {
       .container {
         margin: 20px auto;
         padding: 12px;
@@ -182,11 +231,12 @@
         仕入れ・資材・梱包・送料・販売手数料・目標利益を入力すると、最低販売価格の目安を自動計算します。
       </p>
 
+      <div class="section-title">1. コスト入力</div>
       <div class="grid">
         <div class="field">
           <label for="purchasePrice">仕入れ価格</label>
           <div class="input-wrap">
-            <span>¥</span>
+            <span class="prefix">¥</span>
             <input type="number" id="purchasePrice" min="0" step="1" value="3000" />
           </div>
         </div>
@@ -194,7 +244,7 @@
         <div class="field">
           <label for="materialCost">資材費</label>
           <div class="input-wrap">
-            <span>¥</span>
+            <span class="prefix">¥</span>
             <input type="number" id="materialCost" min="0" step="1" value="500" />
           </div>
         </div>
@@ -202,7 +252,7 @@
         <div class="field">
           <label for="packingCost">梱包費</label>
           <div class="input-wrap">
-            <span>¥</span>
+            <span class="prefix">¥</span>
             <input type="number" id="packingCost" min="0" step="1" value="300" />
           </div>
         </div>
@@ -210,23 +260,49 @@
         <div class="field">
           <label for="shippingCost">送料</label>
           <div class="input-wrap">
-            <span>¥</span>
+            <span class="prefix">¥</span>
             <input type="number" id="shippingCost" min="0" step="1" value="1200" />
           </div>
         </div>
+      </div>
 
+      <div class="section-title">2. 送料の扱い</div>
+      <div class="radio-group">
+        <div class="radio-card">
+          <label>
+            <input type="radio" name="shippingMode" value="shop" checked />
+            <span>
+              店が負担（送料無料）
+              <small>送料を原価に含めて計算します。利益に影響します。</small>
+            </span>
+          </label>
+        </div>
+
+        <div class="radio-card">
+          <label>
+            <input type="radio" name="shippingMode" value="customer" />
+            <span>
+              お客さん負担（別途送料）
+              <small>送料を原価に含めず計算します。販売価格とは別で送料を受け取る想定です。</small>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div class="section-title">3. 販売条件</div>
+      <div class="grid">
         <div class="field">
           <label for="feeRate">販売手数料（%）</label>
           <div class="input-wrap">
-            <span>%</span>
-            <input type="number" id="feeRate" min="0" max="100" step="0.1" value="10" />
+            <span class="prefix">%</span>
+            <input type="number" id="feeRate" min="0" max="99.9" step="0.1" value="5" />
           </div>
         </div>
 
         <div class="field">
           <label for="targetProfit">目標利益</label>
           <div class="input-wrap">
-            <span>¥</span>
+            <span class="prefix">¥</span>
             <input type="number" id="targetProfit" min="0" step="1" value="2000" />
           </div>
         </div>
@@ -247,19 +323,29 @@
           <div class="label">利益率</div>
           <div class="value" id="profitRate">0%</div>
         </div>
+
+        <div class="result-box">
+          <div class="label">送料反映</div>
+          <div class="value" id="shippingApplied">-</div>
+        </div>
+      </div>
+
+      <div class="highlight" id="shippingSummary">
+        送料は店負担として原価に含めています。
       </div>
 
       <div class="calc-detail">
         <h2>計算内訳</h2>
         <ul>
-          <li>原価合計：<span id="totalCost">¥0</span></li>
+          <li>基礎原価（仕入れ＋資材＋梱包）：<span id="baseCost">¥0</span></li>
+          <li>計算対象原価（送料の扱い反映後）：<span id="totalCost">¥0</span></li>
           <li>販売手数料額：<span id="feeAmount">¥0</span></li>
-          <li>販売価格 −（原価合計 + 販売手数料）= 利益</li>
+          <li>販売価格 −（計算対象原価 + 販売手数料）= 利益</li>
         </ul>
       </div>
 
       <div class="sub-info">
-        ※ このツールは簡易計算用です。実際の販売では値引き、資材ロス、撮影・管理の手間、振込手数料なども必要に応じて見込んでください。
+        ※ このツールは簡易計算用です。実際の販売では値引き、資材ロス、撮影・管理の手間、振込手数料、梱包ミスや植物の状態変化なども必要に応じて見込んでください。
       </div>
     </div>
   </div>
@@ -270,6 +356,11 @@
     function getNumber(id) {
       const value = parseFloat(document.getElementById(id).value);
       return Number.isFinite(value) && value >= 0 ? value : 0;
+    }
+
+    function getShippingMode() {
+      const checked = document.querySelector('input[name="shippingMode"]:checked');
+      return checked ? checked.value : "shop";
     }
 
     function formatYen(value) {
@@ -287,36 +378,44 @@
       const shippingCost = getNumber("shippingCost");
       const feeRate = getNumber("feeRate");
       const targetProfit = getNumber("targetProfit");
+      const shippingMode = getShippingMode();
 
-      const totalCost = purchasePrice + materialCost + packingCost + shippingCost;
+      const baseCost = purchasePrice + materialCost + packingCost;
+      const shippingIncluded = shippingMode === "shop";
+      const totalCost = shippingIncluded ? baseCost + shippingCost : baseCost;
 
       let requiredPrice = 0;
-      if (feeRate >= 100) {
-        requiredPrice = 0;
-      } else {
+      let feeAmount = 0;
+      let profitAmount = 0;
+      let profitRate = 0;
+
+      if (feeRate < 100) {
         requiredPrice = (totalCost + targetProfit) / (1 - feeRate / 100);
+        feeAmount = requiredPrice * (feeRate / 100);
+        profitAmount = requiredPrice - totalCost - feeAmount;
+        profitRate = requiredPrice > 0 ? (profitAmount / requiredPrice) * 100 : 0;
       }
 
-      const feeAmount = requiredPrice * (feeRate / 100);
-      const profitAmount = requiredPrice - totalCost - feeAmount;
-      const profitRate = requiredPrice > 0 ? (profitAmount / requiredPrice) * 100 : 0;
+      document.getElementById("requiredPrice").textContent =
+        feeRate >= 100 ? "計算不可" : formatYen(requiredPrice);
 
-      document.getElementById("requiredPrice").textContent = feeRate >= 100
-        ? "計算不可"
-        : formatYen(requiredPrice);
+      document.getElementById("profitAmount").textContent =
+        feeRate >= 100 ? "-" : formatYen(profitAmount);
 
-      document.getElementById("profitAmount").textContent = feeRate >= 100
-        ? "-"
-        : formatYen(profitAmount);
+      document.getElementById("profitRate").textContent =
+        feeRate >= 100 ? "-" : formatPercent(profitRate);
 
-      document.getElementById("profitRate").textContent = feeRate >= 100
-        ? "-"
-        : formatPercent(profitRate);
+      document.getElementById("shippingApplied").textContent =
+        shippingIncluded ? "店負担" : "客負担";
 
+      document.getElementById("baseCost").textContent = formatYen(baseCost);
       document.getElementById("totalCost").textContent = formatYen(totalCost);
-      document.getElementById("feeAmount").textContent = feeRate >= 100
-        ? "-"
-        : formatYen(feeAmount);
+      document.getElementById("feeAmount").textContent =
+        feeRate >= 100 ? "-" : formatYen(feeAmount);
+
+      document.getElementById("shippingSummary").textContent = shippingIncluded
+        ? "送料は店負担として原価に含めています。"
+        : "送料はお客さん負担として扱い、販売価格の計算から除外しています。";
     }
 
     const inputIds = [
@@ -330,6 +429,10 @@
 
     inputIds.forEach(function(id) {
       document.getElementById(id).addEventListener("input", calculate);
+    });
+
+    document.querySelectorAll('input[name="shippingMode"]').forEach(function(radio) {
+      radio.addEventListener("change", calculate);
     });
 
     calculate();
